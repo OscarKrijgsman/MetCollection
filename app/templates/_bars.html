@@ -1,0 +1,14 @@
+{# Horizontal bar list, one series. rows: name, n. total: for the % in the tooltip. #}
+{% macro bars(rows, total=None) %}
+{% set scale = bar_scale(rows) %}
+<ul class="bars">
+  {% for r in rows %}
+  <li title="{{ r.name }}: {{ r.n }}{% if total %} ({{ (100 * r.n / total) | round(1) }}%){% endif %}">
+    <div class="bar-row">
+      <span class="bar-label">{{ r.name }}</span>
+      <span class="bar-track"><span class="bar" style="--w: {{ (100 * r.n / scale) | round(2) }}%"></span><span class="bar-value">{{ "{:,}".format(r.n) }}</span></span>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ item.title }} ({{ item.id }}) · MetCollection{% endblock %}
+{% block content %}
+<div class="crumbs"><a href="/">Collection</a> / <a href="/era/{{ item.era_slug }}">{{ item.era }}</a></div>
+<div class="page-head">
+  <h1>{{ item.title }}</h1>
+  <span class="tag">{{ item.format }}</span>
+  <span class="mono muted">{{ item.id }}</span>
+</div>
+
+{% if item.status == "missing_from_excel" %}
+<div class="banner">This item is no longer in the Excel file. It stays in the database but is hidden from lists and statistics.</div>
+{% endif %}
+
+<section class="panel">
+  <dl class="detail">
+    {% macro row(label, value, cls="") %}{% if value %}<dt>{{ label }}</dt><dd class="{{ cls }}">{{ value }}</dd>{% endif %}{% endmacro %}
+    <dt>Era</dt><dd><a href="/era/{{ item.era_slug }}">{{ item.era }}</a></dd>
+    {{ row("Label", item.label) }}
+    {{ row("Year", item.year_text) }}
+    {{ row("Country", item.country) }}
+    {{ row("Catalog no.", item.catalog_no, "mono") }}
+    {{ row("Barcode", item.barcode, "mono") }}
+    {{ row("Matrix", item.matrix, "mono") }}
+    {{ row("Made in", item.made_in) }}
+    {{ row("Description", item.description) }}
+    {{ row("Additional info", item.additional_info) }}
+    {% if item.notes %}
+    <dt>Notes</dt><dd>{% if item.notes | length == 1 %}{{ item.notes[0] }}{% else %}<ul>{% for n in item.notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}</dd>
+    {% endif %}
+    {% for key, value in item.extra.items() %}{{ row(key, value) }}{% endfor %}
+    {% if item.quantity != 1 %}{{ row("Quantity", item.quantity | string) }}{% endif %}
+    <dt>Excel</dt><dd class="muted">{{ item.source_sheet }}, row {{ item.source_row }}</dd>
+  </dl>
+</section>
+
+<section class="panel" id="images" style="margin-top: 16px;">
+  <h2>Images <span class="muted">{{ images | length or "" }}</span></h2>
+  {% for m in messages %}<div class="banner">{{ m }}</div>{% endfor %}
+  {% if images %}
+  <div class="gallery">
+    {% for im in images %}
+    <figure class="shot">
+      <a class="shot-img" href="/media/{{ im.file_path }}" target="_blank" rel="noopener">
+        <img src="/media/{{ im.thumb_path }}" alt="{{ im.caption or item.title }}">
+      </a>
+      <form class="shot-caption" method="post" action="/item/{{ item.id }}/images/{{ im.id }}/caption">
+        <input name="caption" value="{{ im.caption or '' }}" placeholder="Caption, e.g. Front" aria-label="Caption">
+        <button class="btn-secondary" type="submit">Save</button>
+      </form>
+      <div class="shot-actions">
+        <form method="post" action="/item/{{ item.id }}/images/{{ im.id }}/move">
+          <input type="hidden" name="step" value="-1">
+          <button class="btn-secondary" type="submit" {% if loop.first %}disabled{% endif %} aria-label="Move left">←</button>
+        </form>
+        <form method="post" action="/item/{{ item.id }}/images/{{ im.id }}/move">
+          <input type="hidden" name="step" value="1">
+          <button class="btn-secondary" type="submit" {% if loop.last %}disabled{% endif %} aria-label="Move right">→</button>
+        </form>
+        <span class="muted shot-size">{{ im.width }} × {{ im.height }}</span>
+        <form method="post" action="/item/{{ item.id }}/images/{{ im.id }}/delete" onsubmit="return confirm('Delete this image? This cannot be undone.')">
+          <button class="btn-danger" type="submit">Delete</button>
+        </form>
+      </div>
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <form class="upload" method="post" action="/item/{{ item.id }}/images" enctype="multipart/form-data">
+    <input type="file" name="files" multiple required accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif">
+    <button type="submit">Upload</button>
+    <span class="muted">JPEG, PNG, WebP or HEIC, up to 20 MB each. Select several at once.</span>
+  </form>
+</section>
+{% endblock %}

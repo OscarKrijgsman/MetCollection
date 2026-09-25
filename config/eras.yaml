@@ -1,0 +1,65 @@
+# Canonical eras in display order. Matching ignores case, extra spaces and "…" vs "...".
+# The canonical name always matches itself; add other spellings under aliases.
+# An era name in Excel that matches nothing here stops the import.
+
+eras:
+  - name: "Kill 'Em All"
+    sort: 1
+    aliases: ["Kill em all"]
+  - name: "Ride the Lightning"
+    sort: 2
+  - name: "Master of Puppets"
+    sort: 3
+  - name: "Garage Days"
+    sort: 4
+  - name: "…And Justice for All"
+    sort: 5
+  - name: "Metallica"
+    sort: 6
+  - name: "Load"
+    sort: 7
+  - name: "Reload"
+    sort: 8
+  - name: "Garage Inc."
+    sort: 9
+    aliases: ["Garage inc"]
+  - name: "S&M"
+    sort: 10
+  - name: "Mission Impossible (OST)"
+    sort: 11
+  - name: "St. Anger"
+    sort: 12
+    aliases: ["St.Anger"]
+  - name: "Death Magnetic"
+    sort: 13
+  - name: "Lulu"
+    sort: 14
+  - name: "Beyond Magnetic"
+    sort: 15
+  - name: "Through the Never"
+    sort: 16
+  - name: "Liberte, egalite, fraternite, Metallica!"
+    sort: 17
+  - name: "Hardwired…to Self-Destruct"
+    sort: 18
+  - name: "S&M2"
+    sort: 19
+  - name: "72 Seasons"
+    sort: 20
+  - name: "Compilation"
+    sort: 90
+    special: true
+  - name: "Other"
+    sort: 91
+    special: true
+  - name: "DVD and Boxsets"
+    sort: 99
+    special: true
+
+# Used for rows with an empty Era cell, and for cassette titles that match no era.
+fallback: "Other"
+
+# Sheets without an Era column (Cassettes) get their era from the title.
+# Titles listed here win over the alias lookup.
+title_overrides:
+  "Nothing else matters": "Metallica"

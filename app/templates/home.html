@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_bars.html" import bars %}
+{% block content %}
+<div class="page-head">
+  <h1>The collection</h1>
+  {% if s.last_import %}<span class="sub">Last import {{ s.last_import | local_time }}</span>{% endif %}
+</div>
+
+<div class="tiles">
+  <div class="tile hero"><div class="label">Items</div><div class="value">{{ "{:,}".format(s.total) }}</div></div>
+  {% for row in s.by_sheet %}
+  <div class="tile"><div class="label">{{ row.name }}</div><div class="value">{{ "{:,}".format(row.n) }}</div></div>
+  {% endfor %}
+  <div class="tile"><div class="label">With images</div><div class="value">{{ "{:,}".format(s.with_images) }}</div></div>
+  <a class="tile" href="/concerts"><div class="label">Concerts attended</div><div class="value">{{ s.concerts }}</div></a>
+</div>
+
+<div class="grid grid-2">
+  <section class="panel">
+    <h2>Eras <span class="muted">items per era, click to browse</span></h2>
+    {% set regular = s.eras | rejectattr("is_special") | list %}
+    {% set special = s.eras | selectattr("is_special") | list %}
+    <ul class="bars">
+    {% set scale = bar_scale(s.eras) %}
+    {% for group in [regular, special] %}
+      {% if not loop.first %}<li class="bars-divider" aria-hidden="true"></li>{% endif %}
+      {% for r in group %}
+      <li{% if r.is_special %} class="special"{% endif %} title="{{ r.name }}: {{ r.n }} ({{ (100 * r.n / s.total) | round(1) }}%)">
+        <a class="bar-row" href="/era/{{ r.slug }}">
+          <span class="bar-label">{{ r.name }}</span>
+          <span class="bar-track"><span class="bar" style="--w: {{ (100 * r.n / scale) | round(2) }}%"></span><span class="bar-value">{{ r.n }}</span></span>
+        </a>
+      </li>
+      {% endfor %}
+    {% endfor %}
+    </ul>
+  </section>
+
+  <div class="stack">
+    <section class="panel">
+      <h2>Release decade</h2>
+      {{ bars(s.decades, s.total) }}
+    </section>
+    <section class="panel">
+      <h2>Top countries</h2>
+      {{ bars(s.country, s.total) }}
+    </section>
+    <section class="panel">
+      <h2>Top labels</h2>
+      {{ bars(s.label, s.total) }}
+    </section>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+<input type="hidden" name="sort" value="{{ f.sort }}">
+<input type="hidden" name="dir" value="{{ f.dir }}">
+<div class="result-meta">
+  <span>{{ items | length }} item{{ "" if items | length == 1 else "s" }}{% if active %} match{{ "es" if items | length == 1 else "" }} these filters{% endif %}</span>
+</div>
+{% if items %}
+{% set show_thumbs = items | selectattr("thumb") | list | length > 0 %}
+{% macro th(col, label) %}
+<th scope="col" {% if f.sort == col %}aria-sort="{{ 'descending' if f.dir == 'desc' else 'ascending' }}"{% endif %}>
+  <a href="{{ sort_url(col) }}" hx-get="{{ sort_url(col) }}" hx-target="#results" hx-push-url="true">{{ label }}{% if f.sort == col %} <span class="arrow">{{ "↓" if f.dir == "desc" else "↑" }}</span>{% endif %}</a>
+</th>
+{% endmacro %}
+<div class="table-wrap">
+  <table>
+    <thead><tr>
+      {% if show_thumbs %}<th scope="col"><span class="visually-hidden">Image</span></th>{% endif %}
+      {{ th("id", "ID") }}{{ th("format", "Format") }}{{ th("title", "Title") }}{{ th("label", "Label") }}
+      {{ th("year", "Year") }}{{ th("country", "Country") }}{{ th("catalog", "Catalog no.") }}
+      <th scope="col">Description</th>
+    </tr></thead>
+    <tbody>
+      {% for i in items %}
+      <tr>
+        {% if show_thumbs %}<td class="thumb">{% if i.thumb %}<a href="/item/{{ i.id }}"><img src="/media/{{ i.thumb }}" alt="" loading="lazy"></a>{% endif %}</td>{% endif %}
+        <td class="id"><a href="/item/{{ i.id }}">{{ i.id }}</a></td>
+        <td><span class="tag">{{ i.format }}</span></td>
+        <td><a href="/item/{{ i.id }}">{{ i.title }}</a></td>
+        <td>{{ i.label or "" }}</td>
+        <td>{{ i.year_text or "" }}</td>
+        <td>{{ i.country or "" }}</td>
+        <td class="mono">{{ i.catalog_no or "" }}</td>
+        <td class="desc"><span class="clamp">{{ i.description or "" }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="table-wrap"><div class="empty">Nothing matches these filters. <a href="/era/{{ era.slug }}">Reset</a></div></div>
+{% endif %}

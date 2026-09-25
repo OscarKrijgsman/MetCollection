@@ -1,0 +1,100 @@
+# How each Excel tab maps onto the database.
+# columns: [header in Excel, field] in column order, starting at column A.
+# The importer checks every header and stops if one differs, so an inserted or
+# renamed column is caught. Columns after the listed ones are picked up
+# automatically: a blank header becomes a note, a named header goes into "extra".
+
+formats:
+  cd: CD
+  lp: Vinyl
+  7inch: 7 Inch
+  cassette: Cassette
+  dvd: DVD
+  bluray: Blu-ray
+  boxset: Box set
+  vhs: VHS
+
+item_sheets:
+  - sheet: CDs
+    prefix: CD
+    format: cd
+    columns:
+      - [ID, id]
+      - [SUM, quantity]
+      - [Era, era]
+      - [CD, title]
+      - [Label, label]
+      - [year, year]
+      - [Country, country]
+      - [Barcode, catalog_no]
+      - [Matrix, matrix]
+      - [Made, made_in]
+      - [description, description]
+
+  - sheet: Vinyl
+    prefix: LP
+    format: lp
+    columns:
+      - [ID, id]
+      - ["", quantity]
+      - [Era, era]
+      - [Vinyl, title]
+      - [Label, label]
+      - [year, year]
+      - [Country, country]
+      - [Barcode, catalog_no]
+      - [description, description]
+
+  - sheet: 7Inch
+    prefix: 7IN
+    format: 7inch
+    columns:
+      - [ID, id]
+      - ["", quantity]
+      - [Era, era]
+      - [Vinyl, title]
+      - [Label, label]
+      - [year, year]
+      - [Country, country]
+      - [Barcode, catalog_no]
+      - [description, description]
+
+  - sheet: DVD and boxsets
+    prefix: DVD
+    era: DVD and Boxsets
+    format: dvd
+    # First matching rule (regex on description + additional info) sets the format.
+    format_rules:
+      - [bluray, 'blu-?ray']
+      - [boxset, '\d\s*cds?\b|shoebox|cd-style box']
+      - [vhs, '\bvhs\b']
+    columns:
+      - [ID, id]
+      - [SUM, quantity]
+      - [CD, title]
+      - [Label, label]
+      - [year, year]
+      - [Country, country]
+      - [Barcode, catalog_no]
+      - [Matrix, matrix]
+      - [description, description]
+      - [Additional Info, additional_info]
+
+  - sheet: Cassettes
+    prefix: CAS
+    format: cassette
+    era_from_title: true
+    columns:
+      - [ID, id]
+      - [SUM, quantity]
+      - [Cassette, title]
+      - [Label, label]
+      - [year, year]
+      - [Country, country]
+      - [Barcode, catalog_no]
+      - [Matrix, matrix]
+      - [Made, made_in]
+      - [description, description]
+
+concerts:
+  sheet: Concerts

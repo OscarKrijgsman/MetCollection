@@ -1,0 +1,6 @@
+media/
+*.backup-*.xls
+__pycache__/
+.pytest_cache/
+.env
+.venv/

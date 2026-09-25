@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Imports · MetCollection{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Imports</h1><span class="sub">Run <span class="mono">docker compose run --rm app import Metallica_disc.xls</span> after editing the Excel</span></div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Date</th><th>File</th><th class="num">Added</th><th class="num">Updated</th><th class="num">Unchanged</th><th class="num">Missing</th><th class="num">Restored</th><th>Details</th></tr></thead>
+    <tbody>
+      {% for r in runs %}
+      <tr>
+        <td style="white-space:nowrap">{{ r.finished_at | local_time }}</td>
+        <td class="mono">{{ r.file_name }}</td>
+        <td class="num">{{ r.added }}</td>
+        <td class="num">{{ r.updated }}</td>
+        <td class="num">{{ r.unchanged }}</td>
+        <td class="num">{{ r.missing }}</td>
+        <td class="num">{{ r.restored }}</td>
+        <td>
+          {% set ch = r.changes %}
+          {% if r.warnings or ch.updated or ch.missing or ch.restored or (ch.added and r.added <= 50) %}
+          <details>
+            <summary>Show{% if r.warnings %} ({{ r.warnings | length }} warning{{ "" if r.warnings | length == 1 else "s" }}){% endif %}</summary>
+            <ul class="changes">
+              {% for w in r.warnings %}<li>{{ w }}</li>{% endfor %}
+              {% for id, diff in ch.updated.items() %}
+              <li><a href="/item/{{ id }}">{{ id }}</a>: {% for field, pair in diff.items() %}{{ field }} “{{ pair[0] }}” → “{{ pair[1] }}”{% if not loop.last %}; {% endif %}{% endfor %}</li>
+              {% endfor %}
+              {% if r.added <= 50 %}{% for id in ch.added %}<li>Added <a href="/item/{{ id }}">{{ id }}</a></li>{% endfor %}{% endif %}
+              {% for id in ch.missing %}<li>Missing <a href="/item/{{ id }}">{{ id }}</a></li>{% endfor %}
+              {% for id in ch.restored %}<li>Back <a href="/item/{{ id }}">{{ id }}</a></li>{% endfor %}
+            </ul>
+          </details>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="group-head"><h2>Missing from the Excel</h2><span class="muted">{{ missing | length }}</span></div>
+{% if missing %}
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>ID</th><th>Format</th><th>Title</th><th>Era</th><th>Label</th><th>Year</th><th>Catalog no.</th></tr></thead>
+    <tbody>
+      {% for i in missing %}
+      <tr>
+        <td class="id"><a href="/item/{{ i.id }}">{{ i.id }}</a></td>
+        <td><span class="tag">{{ i.format }}</span></td>
+        <td>{{ i.title }}</td>
+        <td>{{ i.era }}</td>
+        <td>{{ i.label or "" }}</td>
+        <td>{{ i.year_text or "" }}</td>
+        <td class="mono">{{ i.catalog_no or "" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="muted">Every item in the database is still in the Excel file.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+alembic==1.16.5
+fastapi==0.141.1
+Jinja2==3.1.6
+openpyxl==3.1.5
+pillow-heif==1.8.0
+pillow==12.3.0
+psycopg[binary]==3.2.10
+pytest==8.4.2
+python-multipart==0.0.32
+PyYAML==6.0.3
+SQLAlchemy==2.0.43
+tzdata==2025.2
+uvicorn==0.54.0
+xlrd==2.0.2

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ era.name }} · MetCollection{% endblock %}
+{% block content %}
+<div class="crumbs"><a href="/">Collection</a> / Era</div>
+<div class="page-head"><h1>{{ era.name }}</h1></div>
+
+{% macro select(name, label, options, current) %}
+<label class="field">{{ label }}
+  <select name="{{ name }}">
+    <option value="">All</option>
+    {% for o in options %}<option value="{{ o }}" {% if current and current.lower() == o.lower() %}selected{% endif %}>{{ o }}</option>{% endfor %}
+  </select>
+</label>
+{% endmacro %}
+
+<form class="filters" action="/era/{{ era.slug }}" hx-get="/era/{{ era.slug }}" hx-target="#results"
+      hx-push-url="true" hx-trigger="input delay:350ms, submit">
+  {% if facets.formats | length > 1 %}
+  <div class="chips" role="group" aria-label="Format">
+    {% for fmt in facets.formats %}
+    <label class="chip"><input type="checkbox" name="format" value="{{ fmt.code }}" {% if fmt.code in f.format %}checked{% endif %}><span>{{ fmt.name }} · {{ fmt.n }}</span></label>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="filter-row">
+    {{ select("title", "Title", facets.titles, f.title) }}
+    {{ select("label", "Label", facets.labels, f.label) }}
+    {{ select("country", "Country", facets.countries, f.country) }}
+    <label class="field">Year from
+      <input class="year" type="number" name="year_from" inputmode="numeric" value="{{ f.year_from if f.year_from is not none else '' }}" placeholder="{{ facets.years[0] or '' }}">
+    </label>
+    <label class="field">Year to
+      <input class="year" type="number" name="year_to" inputmode="numeric" value="{{ f.year_to if f.year_to is not none else '' }}" placeholder="{{ facets.years[1] or '' }}">
+    </label>
+    <label class="field">Barcode / catalog no.
+      <input class="code" type="search" name="code" value="{{ f.code or '' }}" placeholder="e.g. 60766-2">
+    </label>
+    <a class="reset" href="/era/{{ era.slug }}">Reset</a>
+    <noscript><button type="submit">Apply</button></noscript>
+  </div>
+  <div id="results">{% include "_items.html" %}</div>
+</form>
+{% endblock %}

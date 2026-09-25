@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% from "_bars.html" import bars %}
+{% block title %}Concerts · MetCollection{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Concerts attended</h1></div>
+<div class="tiles">
+  <div class="tile hero"><div class="label">Concerts</div><div class="value">{{ rows | length }}</div></div>
+  <div class="tile"><div class="label">With Kees</div><div class="value">{{ with_kees }}</div></div>
+  <div class="tile"><div class="label">Countries</div><div class="value">{{ by_country | length }}</div></div>
+  {% if rows %}<div class="tile"><div class="label">First and latest</div><div class="value">{{ rows[0].date.year }} to {{ rows[-1].date.year }}</div></div>{% endif %}
+</div>
+<div class="stack">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date</th><th>Place</th><th>Venue</th><th>Country</th><th>With Kees</th><th>With whom</th></tr></thead>
+      <tbody>
+        {% for c in rows %}
+        <tr>
+          <td style="white-space:nowrap">{{ c.date.strftime("%-d %b %Y") }}</td>
+          <td>{{ c.place or "" }}</td>
+          <td>{{ c.venue or "" }}</td>
+          <td>{{ c.country or "" }}</td>
+          <td>{{ "Yes" if c.with_kees else "No" }}</td>
+          <td>{{ c.with_whom or "" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <section class="panel" style="max-width: 560px;">
+    <h2>Per country</h2>
+    {{ bars(by_country, rows | length) }}
+  </section>
+</div>
+{% endblock %}

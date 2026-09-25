@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{% if q %}{{ q }} · {% endif %}Search · MetCollection{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Search</h1></div>
+<form class="search-big" action="/search" role="search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Barcode, catalog no., matrix, title, ID" aria-label="Search" autofocus>
+  <button type="submit">Search</button>
+</form>
+
+{% if q %}
+<div class="result-meta"><span>{{ results | length }} result{{ "" if results | length == 1 else "s" }} for “{{ q }}”{% if results | length >= 500 %} (showing the first 500){% endif %}</span></div>
+{% if not results %}
+<div class="table-wrap"><div class="empty">Nothing found. Spaces and dashes in numbers don't matter; try part of the catalog number.</div></div>
+{% endif %}
+{% for (era_name, era_slug), rows in groups.items() %}
+<div class="group-head"><h2><a href="/era/{{ era_slug }}">{{ era_name }}</a></h2><span class="muted">{{ rows | length }}</span></div>
+{% set show_thumbs = rows | selectattr("thumb") | list | length > 0 %}
+<div class="table-wrap">
+  <table>
+    <thead><tr>{% if show_thumbs %}<th><span class="visually-hidden">Image</span></th>{% endif %}<th>ID</th><th>Format</th><th>Title</th><th>Label</th><th>Year</th><th>Country</th><th>Catalog no.</th><th>Barcode</th><th>Description</th></tr></thead>
+    <tbody>
+      {% for i in rows %}
+      <tr>
+        {% if show_thumbs %}<td class="thumb">{% if i.thumb %}<a href="/item/{{ i.id }}"><img src="/media/{{ i.thumb }}" alt="" loading="lazy"></a>{% endif %}</td>{% endif %}
+        <td class="id"><a href="/item/{{ i.id }}">{{ i.id }}</a></td>
+        <td><span class="tag">{{ i.format }}</span></td>
+        <td><a href="/item/{{ i.id }}">{{ i.title }}</a></td>
+        <td>{{ i.label or "" }}</td>
+        <td>{{ i.year_text or "" }}</td>
+        <td>{{ i.country or "" }}</td>
+        <td class="mono">{{ i.catalog_no or "" }}</td>
+        <td class="mono">{{ i.barcode or "" }}</td>
+        <td class="desc"><span class="clamp">{{ i.description or "" }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

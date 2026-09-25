@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MetCollection{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/htmx.min.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="/">MetCollection</a>
+      <nav class="site-nav">
+        {% set path = request.url.path %}
+        <a href="/" {% if path == "/" %}aria-current="page"{% endif %}>Collection</a>
+        <a href="/concerts" {% if path == "/concerts" %}aria-current="page"{% endif %}>Concerts</a>
+        <a href="/imports" {% if path == "/imports" %}aria-current="page"{% endif %}>Imports</a>
+      </nav>
+      <form class="site-search" action="/search" role="search">
+        <input type="search" name="q" value="{{ q or '' }}" placeholder="Search barcode, catalog no., title, ID" aria-label="Search the collection">
+      </form>
+    </div>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
