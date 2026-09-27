@@ -21,13 +21,9 @@
     {{ row("Country", item.country) }}
     {{ row("Catalog no.", item.catalog_no, "mono") }}
     {{ row("Barcode", item.barcode, "mono") }}
-    {{ row("Matrix", item.matrix, "mono") }}
-    {{ row("Made in", item.made_in) }}
+    {% if (item.matrix or "") not in (item.description or "") %}{{ row("Matrix", item.matrix, "mono") }}{% endif %}
+    {% if (item.made_in or "") not in (item.description or "") %}{{ row("Made in", item.made_in) }}{% endif %}
     {{ row("Description", item.description) }}
-    {{ row("Additional info", item.additional_info) }}
-    {% if item.notes %}
-    <dt>Notes</dt><dd>{% if item.notes | length == 1 %}{{ item.notes[0] }}{% else %}<ul>{% for n in item.notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}</dd>
-    {% endif %}
     {% for key, value in item.extra.items() %}{{ row(key, value) }}{% endfor %}
     {% if item.quantity != 1 %}{{ row("Quantity", item.quantity | string) }}{% endif %}
     <dt>Excel</dt><dd class="muted">{{ item.source_sheet }}, row {{ item.source_row }}</dd>

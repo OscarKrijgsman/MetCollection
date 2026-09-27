@@ -9,7 +9,7 @@ from .normalize import slugify
 ITEM_COLUMNS = [
     "id", "source_sheet", "source_row", "title", "label", "year", "year_text", "year_uncertain",
     "country", "catalog_no", "catalog_norm", "barcode", "matrix", "made_in", "description",
-    "additional_info", "notes", "quantity", "content_hash",
+    "quantity", "content_hash",
 ]
 # Fields compared when reporting what changed in an edited row.
 DIFF_FIELDS = [c for c in ITEM_COLUMNS if c not in ("id", "source_row", "content_hash")] + ["era", "format", "extra"]

@@ -16,7 +16,7 @@ from .normalize import (
     parse_year,
 )
 
-TEXT_FIELDS = ["label", "country", "catalog_no", "matrix", "made_in", "description", "additional_info"]
+TEXT_FIELDS = ["label", "country", "catalog_no", "matrix", "made_in", "description"]
 
 
 def load_workbook(path):
@@ -112,13 +112,16 @@ def read_items(sheet_rows, spec, eras, seen_ids, result):
         year, year_text, year_uncertain = parse_year(raw.get("year"))
         text = {f: clean(raw.get(f)) for f in TEXT_FIELDS}
         notes = [n for i, h in trailing if not h and (n := clean(row[i] if i < len(row) else None))]
+        text["description"] = "; ".join(
+            filter(None, [text["description"], clean(raw.get("additional_info")), *notes,
+                          *(text[f] for f in spec.get("append_to_description", []))])) or None
         extra = {h: v for i, h in trailing if h and (v := clean(row[i] if i < len(row) else None))}
 
         item = {
             "id": item_id,
             "era": era,
             "format": match_format(spec.get("format_rules", []), spec["format"],
-                                   text["description"], text["additional_info"]),
+                                   text["description"]),
             "source_sheet": sheet,
             "source_row": row_no,
             "title": title,
@@ -127,9 +130,7 @@ def read_items(sheet_rows, spec, eras, seen_ids, result):
             "year_uncertain": year_uncertain,
             **text,
             "catalog_norm": catalog_norm(text["catalog_no"]),
-            "barcode": extract_barcode(text["catalog_no"], text["description"],
-                                       text["additional_info"], *notes),
-            "notes": notes,
+            "barcode": extract_barcode(text["catalog_no"], text["description"]),
             "quantity": quantity,
             "extra": extra,
         }

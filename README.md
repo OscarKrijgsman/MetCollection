@@ -46,7 +46,7 @@ Files are stored in `media/items/<ID>/`, with a thumbnail next to each. They are
 The import stops without changing anything when a row has no ID, an ID is duplicated, an era is unknown, or a column header moved. The message says what to fix.
 
 - **Unknown era:** add the spelling as an alias (or a new era) in `config/eras.yaml`.
-- **New or moved column:** update `config/sheets.yaml`. Extra columns at the end of a sheet are picked up automatically (blank header: note, named header: extra field).
+- **New or moved column:** update `config/sheets.yaml`. Extra columns at the end of a sheet are picked up automatically (blank header: appended to the description, named header: extra field). To also append an existing column to the description, list it under `append_to_description` for that sheet (CDs do this for Made and Matrix).
 - **Row removed from Excel:** the item stays in the database, marked `missing_from_excel`. It comes back if the ID returns.
 
 ## IDs

@@ -40,9 +40,9 @@ Data issues the importer has to handle:
 2. **The "Barcode" column mostly holds catalog numbers** (`CDMFN 7`, `60766-2`, `BLCKND043-4`). Actual EAN/UPC barcodes sometimes appear in the description instead (`Slim-case, 00602508861512`). The plan is to keep the column as `catalog_no`, pull any 8 to 14 digit number found in any text field into `barcode`, and make search cover both.
 3. **Separator rows.** Rows with SUM 0 and no data separate groups. They have no ID and the importer skips them.
 4. **Irregular years:** `19??`, `200?`, `1988?`, `2008/2010`, `????`, `?`. Both versions get stored: the raw text (`year_text`) for display, and a parsed integer (`year`) plus an `year_uncertain` flag for filtering and stats.
-5. **Duplicates.** Some rows describe two copies ("Twice in collection #02 & #05") but still have SUM 1. SUM becomes `quantity`, and the note is kept as it is.
+5. **Duplicates.** Some rows describe two copies ("Twice in collection #02 & #05") but still have SUM 1. SUM becomes `quantity`, and the note is kept as it is in the description.
 6. **Vinyl `Various artists` row:** SUM 0 and only a title. Read as a sub-heading, so it has no ID and isn't imported.
-7. **Unnamed note columns** in CDs, Vinyl and 7Inch. They're imported as `note_1..note_3`, all shown on the detail page and all searchable.
+7. **Unnamed note columns** in CDs, Vinyl and 7Inch, and **Additional Info** in DVD and boxsets. They're appended to `description`, so there's one text field that is shown on the detail page and searchable. For CDs, Made and Matrix are appended as well (section 12).
 
 The importer checks its own count against the SUM total row of each sheet and reports any difference.
 
@@ -99,14 +99,12 @@ item
   barcode       text null          -- EAN/UPC digits found in any field
   matrix        text
   made_in       text
-  description   text
-  additional_info text
-  notes         text[]             -- unnamed note columns
+  description   text               -- description + Additional Info + unnamed columns (+ Made, Matrix for CDs), joined with "; "
   quantity      int default 1
   content_hash  text               -- hash of all row values, used to detect changes on re-import
   status        text               -- 'active' | 'missing_from_excel'
   extra         jsonb default '{}' -- any column not mapped above
-  search        tsvector generated -- title, label, country, catalog, barcode, matrix, made_in, description, notes
+  search        tsvector generated -- title, label, country, catalog, barcode, matrix, made_in, description
   first_seen_import_id  FK import_run
   last_seen_import_id   FK import_run
   created_at, updated_at
@@ -233,7 +231,8 @@ All pages are server-rendered. Filters live in the URL query string, so any filt
 - Filters update through HTMX without reloading the page
 
 **`/item/{id}`: detail** (e.g. `/item/CD-0001`)
-- Every field, including matrix, made in, description, notes, `extra`, and the source sheet and row
+- Every field, including matrix, made in, description, `extra`, and the source sheet and row
+- Matrix and Made in are hidden when their value already appears in the description, so nothing shows twice
 - Image gallery (phase 3): upload multiple images, add a caption, reorder, delete
 
 **`/search?q=`: global search**
@@ -327,3 +326,28 @@ These questions weren't answered. The plan uses the defaults below. Say so if an
 **Phase 3: images** (done)
 - Upload, thumbnails, gallery, reorder and delete, a thumbnail column in the lists
 - Check: upload, edit and sort the Excel, re-import, and confirm the images stay attached
+
+---
+
+## 12. Changes on 2026-09-27: one description field
+
+Everything that describes a copy now ends up in `description`. Sections 2, 4 and 7 are updated to match.
+
+**How description is built**, parts joined with `"; "` and empty parts skipped:
+
+1. The Excel `description` column
+2. DVD and boxsets: the `Additional Info` column
+3. Any unnamed columns after that (CDs, Vinyl, 7Inch)
+4. CDs only: `Made`, then `Matrix`
+
+Example: CD-0001 becomes `White back sleeve; USA; MANUFACTURED IN U.S.A. BY LASERVIDEO INC.`
+
+**Schema.** Migration `0002` moved the existing values into `description` and dropped `item.additional_info` and `item.notes`. The `search` column was rebuilt without them.
+
+**CDs keep Made and Matrix as fields.** The values are copied into the description, not moved, so the partial matrix search keeps working. This is set per sheet in `config/sheets.yaml` with `append_to_description: [made_in, matrix]`.
+
+**Detail page.** The Additional info and Notes rows are gone. The Matrix and Made in rows are hidden when their value already appears in the description, so nothing shows twice.
+
+**DVD format** is still read from the description (section 10, point 3). Additional Info is part of it now, so the result is the same.
+
+**Verified:** 61 tests pass. After a full re-import, a dry run reports all 1102 items unchanged.
