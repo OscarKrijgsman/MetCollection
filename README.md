@@ -23,6 +23,21 @@ Open http://localhost:8000. Stop with `docker compose down` (the data stays).
 
 From a phone or tablet on the same wifi: `http://<mac-name>.local:8000` (the Mac's name is shown by `scutil --get LocalHostName`). Anyone on the network can open it, including uploading and deleting images; change `"8000:8000"` back to `"127.0.0.1:8000:8000"` in `docker-compose.yml` to limit it to this Mac.
 
+### From anywhere (Tailscale)
+
+The Mac is on a private Tailscale network under the name `metcollection`. Only devices logged in to the same Tailscale account can reach it; nothing is open to the internet.
+
+1. Install Tailscale on the phone or laptop (App Store, Play Store or tailscale.com) and log in with the same account as the Mac.
+2. Turn Tailscale on and open http://metcollection:8000. If a browser doesn't resolve the short name, use the full name shown in the Tailscale admin console (`metcollection.<tailnet>.ts.net`).
+
+The Mac has to be awake with Docker running. To keep it awake while plugged in: System Settings, Battery, Options.
+
+The name was set with:
+
+```bash
+/Applications/Tailscale.app/Contents/MacOS/Tailscale set --hostname=metcollection
+```
+
 ## Images
 
 Open an item (click its ID or title) and use **Upload** at the bottom. Select several files at once; JPEG, PNG, WebP and HEIC (iPhone photos, converted to JPEG) up to 20 MB each. Add a caption, reorder with the arrows, or delete.
