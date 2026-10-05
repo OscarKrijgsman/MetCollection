@@ -4,6 +4,16 @@ PostgreSQL database of the Metallica collection in `Metallica_disc.xls`. The Exc
 
 Requires Docker Desktop.
 
+## How it fits together
+
+![Components and data flow](docs/architecture.svg)
+
+The import runs as a one-off container: it reads the Excel file, validates it and refreshes PostgreSQL in one transaction. Nothing is written back to Excel except the IDs that `assign_ids.py` adds on the Mac. The web container reads the database and writes only photos: the files go to `media/`, their paths to `item_image`.
+
+![Database schema](docs/schema.svg)
+
+`item.id` is the ID from the Excel sheet, so photos stay attached when rows are edited, moved or sorted.
+
 ## First run
 
 ```bash

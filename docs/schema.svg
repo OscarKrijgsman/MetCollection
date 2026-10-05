@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" role="img" aria-label="Schema: item is the central table keyed by the Excel ID; it references era, format and import_run; item_image references item; concert stands alone.">
+<style>
+text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+.m, .en, .col { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.zone { fill: none; stroke-dasharray: 6 4; }
+.box.master { stroke-width: 2; }
+.zl { font-size: 11px; font-weight: 600; letter-spacing: .1em; }
+.t { font-size: 13px; font-weight: 600; }
+.m { font-size: 12px; font-weight: 500; }
+.s { font-size: 11.5px; }
+.e { fill: none; stroke-width: 1.4; }
+.e.hot { stroke-width: 2; }
+.lbl { font-size: 11px; paint-order: stroke; stroke-width: 5px; stroke-linejoin: round; }
+.en { font-size: 12.5px; font-weight: 600; }
+.col { font-size: 12px; }
+.tag { font-size: 10px; font-weight: 600; letter-spacing: .06em; }
+.card { font-size: 11px; font-weight: 600; }
+.rel { fill: none; stroke-width: 1.4; }
+.bg { fill: #f3f4f6; }
+.host { fill: #fbfbfc; stroke: #a9afba; }
+.zone { stroke: #a9afba; }
+.ctr { fill: #eceef2; stroke: #a9afba; }
+.box, .eb { fill: #ffffff; stroke: #a9afba; }
+.box.master { stroke: #b4530f; }
+.eh { fill: #f6e6d8; stroke: #a9afba; }
+.t, .m, .en, .col { fill: #1d2129; }
+.s, .zl, .lbl, .tag, .card { fill: #5b6270; }
+.lbl { stroke: #fbfbfc; }
+.lbl.hot, .ah.hot { fill: #b4530f; }
+.e, .rel { stroke: #4a5160; }
+.e.hot { stroke: #b4530f; }
+.ah { fill: #4a5160; }
+@media (prefers-color-scheme: dark) {
+.bg { fill: #15171c; }
+.host { fill: #1b1e24; stroke: #4d5461; }
+.zone { stroke: #4d5461; }
+.ctr { fill: #23272f; stroke: #4d5461; }
+.box, .eb { fill: #2a2f38; stroke: #4d5461; }
+.box.master { stroke: #f08a3e; }
+.eh { fill: #3d2a1c; stroke: #4d5461; }
+.t, .m, .en, .col { fill: #e6e8ec; }
+.s, .zl, .lbl, .tag, .card { fill: #9aa1ad; }
+.lbl { stroke: #1b1e24; }
+.lbl.hot, .ah.hot { fill: #f08a3e; }
+.e, .rel { stroke: #b4bac5; }
+.e.hot { stroke: #f08a3e; }
+.ah { fill: #b4bac5; }
+}
+</style>
+<rect class="bg" width="900" height="470"/>
+  <!-- era -->
+  <rect class="eb" x="30" y="30" width="190" height="126" rx="5"/>
+  <rect class="eh" x="30" y="30" width="190" height="28" rx="5"/>
+  <text class="en" x="42" y="49">era</text>
+  <text class="col" x="42" y="72">id</text><text class="tag" x="208" y="72" text-anchor="end">PK</text>
+  <text class="col" x="42" y="90">name</text>
+  <text class="col" x="42" y="108">slug</text>
+  <text class="col" x="42" y="126">sort_order</text>
+  <text class="col" x="42" y="144">is_special</text>
+
+  <!-- format -->
+  <rect class="eb" x="30" y="190" width="190" height="90" rx="5"/>
+  <rect class="eh" x="30" y="190" width="190" height="28" rx="5"/>
+  <text class="en" x="42" y="209">format</text>
+  <text class="col" x="42" y="232">id</text><text class="tag" x="208" y="232" text-anchor="end">PK</text>
+  <text class="col" x="42" y="250">code</text>
+  <text class="col" x="42" y="268">name</text>
+
+  <!-- concert -->
+  <rect class="eb" x="30" y="310" width="190" height="144" rx="5"/>
+  <rect class="eh" x="30" y="310" width="190" height="28" rx="5"/>
+  <text class="en" x="42" y="329">concert</text>
+  <text class="col" x="42" y="352">id</text><text class="tag" x="208" y="352" text-anchor="end">PK</text>
+  <text class="col" x="42" y="370">date</text>
+  <text class="col" x="42" y="388">place, venue</text>
+  <text class="col" x="42" y="406">country</text>
+  <text class="col" x="42" y="424">with_kees</text>
+  <text class="col" x="42" y="442">with_whom</text>
+
+  <!-- item -->
+  <rect class="eb" x="300" y="30" width="250" height="360" rx="5"/>
+  <rect class="eh" x="300" y="30" width="250" height="28" rx="5"/>
+  <text class="en" x="312" y="49">item</text>
+  <text class="col" x="312" y="72">id  "CD-0001"</text><text class="tag" x="538" y="72" text-anchor="end">PK</text>
+  <text class="col" x="312" y="90">era_id</text><text class="tag" x="538" y="90" text-anchor="end">FK</text>
+  <text class="col" x="312" y="108">format_id</text><text class="tag" x="538" y="108" text-anchor="end">FK</text>
+  <text class="col" x="312" y="126">source_sheet, source_row</text>
+  <text class="col" x="312" y="144">title</text>
+  <text class="col" x="312" y="162">label</text>
+  <text class="col" x="312" y="180">year, year_text</text>
+  <text class="col" x="312" y="198">country</text>
+  <text class="col" x="312" y="216">catalog_no, catalog_norm</text>
+  <text class="col" x="312" y="234">barcode</text>
+  <text class="col" x="312" y="252">matrix, made_in</text>
+  <text class="col" x="312" y="270">description</text>
+  <text class="col" x="312" y="288">quantity</text>
+  <text class="col" x="312" y="306">extra</text><text class="tag" x="538" y="306" text-anchor="end">JSONB</text>
+  <text class="col" x="312" y="324">content_hash</text>
+  <text class="col" x="312" y="342">status</text><text class="tag" x="538" y="342" text-anchor="end">ACTIVE / MISSING</text>
+  <text class="col" x="312" y="360">search</text><text class="tag" x="538" y="360" text-anchor="end">TSVECTOR</text>
+  <text class="col" x="312" y="378">first/last_seen_import_id</text><text class="tag" x="538" y="378" text-anchor="end">FK</text>
+
+  <!-- item_image -->
+  <rect class="eb" x="640" y="30" width="230" height="180" rx="5"/>
+  <rect class="eh" x="640" y="30" width="230" height="28" rx="5"/>
+  <text class="en" x="652" y="49">item_image</text>
+  <text class="col" x="652" y="72">id</text><text class="tag" x="858" y="72" text-anchor="end">PK</text>
+  <text class="col" x="652" y="90">item_id</text><text class="tag" x="858" y="90" text-anchor="end">FK RESTRICT</text>
+  <text class="col" x="652" y="108">file_path</text>
+  <text class="col" x="652" y="126">thumb_path</text>
+  <text class="col" x="652" y="144">caption</text>
+  <text class="col" x="652" y="162">sort_order</text>
+  <text class="col" x="652" y="180">width, height</text>
+  <text class="col" x="652" y="198">created_at</text>
+
+  <!-- import_run -->
+  <rect class="eb" x="640" y="250" width="230" height="180" rx="5"/>
+  <rect class="eh" x="640" y="250" width="230" height="28" rx="5"/>
+  <text class="en" x="652" y="269">import_run</text>
+  <text class="col" x="652" y="292">id</text><text class="tag" x="858" y="292" text-anchor="end">PK</text>
+  <text class="col" x="652" y="310">file_name, file_sha256</text>
+  <text class="col" x="652" y="328">started_at, finished_at</text>
+  <text class="col" x="652" y="346">added, updated</text>
+  <text class="col" x="652" y="364">unchanged</text>
+  <text class="col" x="652" y="382">missing, restored</text>
+  <text class="col" x="652" y="400">warnings</text><text class="tag" x="858" y="400" text-anchor="end">JSONB</text>
+  <text class="col" x="652" y="418">changes</text><text class="tag" x="858" y="418" text-anchor="end">JSONB</text>
+
+  <!-- relations -->
+  <polyline class="rel" points="220,67 260,67 260,85 300,85"/>
+  <text class="card" x="226" y="62">1</text><text class="card" x="288" y="80">n</text>
+  <polyline class="rel" points="220,227 270,227 270,103 300,103"/>
+  <text class="card" x="226" y="222">1</text><text class="card" x="288" y="98">n</text>
+  <polyline class="rel" points="550,67 595,67 595,85 640,85"/>
+  <text class="card" x="556" y="62">1</text><text class="card" x="628" y="80">n</text>
+  <polyline class="rel" points="640,287 605,287 605,373 550,373"/>
+  <text class="card" x="628" y="282">1</text><text class="card" x="556" y="368">n</text>
+</svg>

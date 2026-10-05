@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1310" height="690" viewBox="0 0 1310 690" role="img" aria-label="Metallica_disc.xls on the Mac is read by a one-off import container that writes to PostgreSQL; a web container reads PostgreSQL, serves browsers on port 8000 and saves photos in the media folder.">
+<style>
+text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+.m, .en, .col { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.zone { fill: none; stroke-dasharray: 6 4; }
+.box.master { stroke-width: 2; }
+.zl { font-size: 11px; font-weight: 600; letter-spacing: .1em; }
+.t { font-size: 13px; font-weight: 600; }
+.m { font-size: 12px; font-weight: 500; }
+.s { font-size: 11.5px; }
+.e { fill: none; stroke-width: 1.4; }
+.e.hot { stroke-width: 2; }
+.lbl { font-size: 11px; paint-order: stroke; stroke-width: 5px; stroke-linejoin: round; }
+.en { font-size: 12.5px; font-weight: 600; }
+.col { font-size: 12px; }
+.tag { font-size: 10px; font-weight: 600; letter-spacing: .06em; }
+.card { font-size: 11px; font-weight: 600; }
+.rel { fill: none; stroke-width: 1.4; }
+.bg { fill: #f3f4f6; }
+.host { fill: #fbfbfc; stroke: #a9afba; }
+.zone { stroke: #a9afba; }
+.ctr { fill: #eceef2; stroke: #a9afba; }
+.box, .eb { fill: #ffffff; stroke: #a9afba; }
+.box.master { stroke: #b4530f; }
+.eh { fill: #f6e6d8; stroke: #a9afba; }
+.t, .m, .en, .col { fill: #1d2129; }
+.s, .zl, .lbl, .tag, .card { fill: #5b6270; }
+.lbl { stroke: #fbfbfc; }
+.lbl.hot, .ah.hot { fill: #b4530f; }
+.e, .rel { stroke: #4a5160; }
+.e.hot { stroke: #b4530f; }
+.ah { fill: #4a5160; }
+@media (prefers-color-scheme: dark) {
+.bg { fill: #15171c; }
+.host { fill: #1b1e24; stroke: #4d5461; }
+.zone { stroke: #4d5461; }
+.ctr { fill: #23272f; stroke: #4d5461; }
+.box, .eb { fill: #2a2f38; stroke: #4d5461; }
+.box.master { stroke: #f08a3e; }
+.eh { fill: #3d2a1c; stroke: #4d5461; }
+.t, .m, .en, .col { fill: #e6e8ec; }
+.s, .zl, .lbl, .tag, .card { fill: #9aa1ad; }
+.lbl { stroke: #1b1e24; }
+.lbl.hot, .ah.hot { fill: #f08a3e; }
+.e, .rel { stroke: #b4bac5; }
+.e.hot { stroke: #f08a3e; }
+.ah { fill: #b4bac5; }
+}
+</style>
+<rect class="bg" width="1310" height="690"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah hot" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+
+  <!-- zones -->
+  <rect class="host" x="10" y="10" width="1065" height="670" rx="10"/>
+  <text class="zl" x="28" y="36">MAC (HOST)</text>
+  <text class="s" x="1058" y="36" text-anchor="end">project folder bind-mounted into both app containers as /app</text>
+  <rect class="zone" x="255" y="52" width="805" height="528" rx="8"/>
+  <text class="zl" x="271" y="76">DOCKER COMPOSE</text>
+  <text class="zl" x="1105" y="182">BROWSERS</text>
+
+  <!-- column A: files on the Mac -->
+  <rect class="box master" x="30" y="142" width="200" height="80" rx="6"/>
+  <text class="m" x="44" y="167">Metallica_disc.xls</text>
+  <text class="s" x="44" y="187">master copy, edited in Excel</text>
+  <text class="s" x="44" y="205">5 item sheets + Concerts</text>
+
+  <rect class="box" x="30" y="282" width="200" height="64" rx="6"/>
+  <text class="m" x="44" y="307">scripts/assign_ids.py</text>
+  <text class="s" x="44" y="327">drives Excel (AppleScript)</text>
+  <line class="e" x1="130" y1="282" x2="130" y2="226" marker-end="url(#a)"/>
+  <text class="lbl" x="140" y="258">fills in new IDs</text>
+
+  <rect class="box" x="30" y="395" width="200" height="80" rx="6"/>
+  <text class="m" x="44" y="420">config/sheets.yaml</text>
+  <text class="m" x="44" y="440">config/eras.yaml</text>
+  <text class="s" x="44" y="460">column map, era aliases</text>
+
+  <rect class="box" x="30" y="560" width="200" height="56" rx="6"/>
+  <text class="t" x="44" y="584">TablePlus / DBeaver</text>
+  <text class="m" x="44" y="603">localhost:5433</text>
+
+  <!-- column B: import container -->
+  <rect class="ctr" x="280" y="100" width="200" height="400" rx="8"/>
+  <text class="t" x="294" y="124">app · import</text>
+  <text class="s" x="294" y="142">docker compose run app import</text>
+
+  <rect class="box" x="295" y="160" width="170" height="44" rx="5"/>
+  <text class="m" x="309" y="179">read_excel</text>
+  <text class="s" x="309" y="196">check IDs, headers, eras</text>
+  <rect class="box" x="295" y="220" width="170" height="44" rx="5"/>
+  <text class="m" x="309" y="239">normalize</text>
+  <text class="s" x="309" y="256">years, catalog no., eras</text>
+  <rect class="box" x="295" y="280" width="170" height="44" rx="5"/>
+  <text class="m" x="309" y="299">alembic upgrade</text>
+  <text class="s" x="309" y="316">create / update schema</text>
+  <rect class="box" x="295" y="340" width="170" height="44" rx="5"/>
+  <text class="m" x="309" y="359">sync</text>
+  <text class="s" x="309" y="376">upsert, diff, log the run</text>
+  <line class="e hot" x1="380" y1="204" x2="380" y2="219" marker-end="url(#ah)"/>
+  <line class="e hot" x1="380" y1="264" x2="380" y2="279" marker-end="url(#ah)"/>
+  <line class="e hot" x1="380" y1="324" x2="380" y2="339" marker-end="url(#ah)"/>
+  <text class="s" x="294" y="420">Any error: stops, nothing saved</text>
+  <text class="s" x="294" y="438">--dry-run: rolls back at the end</text>
+  <text class="s" x="294" y="456">Prints a change report, then exits</text>
+
+  <polyline class="e hot" points="230,182 295,182" marker-end="url(#ah)"/>
+  <text class="lbl hot" x="244" y="175">reads</text>
+  <polyline class="e" points="230,435 245,435 245,242 295,242" marker-end="url(#a)"/>
+  <text class="lbl" x="250" y="300">rules</text>
+
+  <!-- column C: database -->
+  <rect class="ctr" x="560" y="100" width="200" height="400" rx="8"/>
+  <text class="t" x="574" y="124">db · PostgreSQL 16</text>
+  <text class="s" x="574" y="142">postgres:16 container</text>
+  <rect class="box" x="575" y="160" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="175">item</text><text class="s" x="589" y="189">one row per Excel row</text>
+  <rect class="box" x="575" y="204" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="219">item_image</text><text class="s" x="589" y="233">photo records</text>
+  <rect class="box" x="575" y="248" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="263">era</text><text class="s" x="589" y="277">loaded from eras.yaml</text>
+  <rect class="box" x="575" y="292" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="307">format</text><text class="s" x="589" y="321">CD, LP, 7 Inch, DVD …</text>
+  <rect class="box" x="575" y="336" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="351">concert</text><text class="s" x="589" y="365">Concerts sheet</text>
+  <rect class="box" x="575" y="380" width="170" height="36" rx="5"/>
+  <text class="m" x="589" y="395">import_run</text><text class="s" x="589" y="409">one row per import</text>
+  <text class="s" x="574" y="446">full-text + trigram indexes</text>
+  <text class="s" x="574" y="464">for search on item</text>
+
+  <rect class="box" x="600" y="525" width="120" height="34" rx="5"/>
+  <text class="m" x="660" y="546" text-anchor="middle">pgdata volume</text>
+  <line class="e" x1="660" y1="500" x2="660" y2="524" marker-end="url(#a)"/>
+
+  <line class="e" x1="465" y1="302" x2="559" y2="302" marker-end="url(#a)"/>
+  <text class="lbl" x="512" y="295" text-anchor="middle">schema</text>
+  <line class="e hot" x1="465" y1="362" x2="559" y2="362" marker-end="url(#ah)"/>
+  <text class="lbl hot" x="512" y="342" text-anchor="middle">upsert, one</text>
+  <text class="lbl hot" x="512" y="355" text-anchor="middle">transaction</text>
+
+  <polyline class="e" points="230,588 540,588 540,470 559,470" marker-end="url(#a)"/>
+  <text class="lbl" x="400" y="582" text-anchor="middle">SQL, this Mac only</text>
+
+  <!-- column D: web container -->
+  <rect class="ctr" x="840" y="100" width="200" height="400" rx="8"/>
+  <text class="t" x="854" y="124">app · web</text>
+  <text class="s" x="854" y="142">docker compose up, port 8000</text>
+  <rect class="box" x="855" y="160" width="170" height="44" rx="5"/>
+  <text class="m" x="869" y="179">FastAPI + htmx</text>
+  <text class="s" x="869" y="196">Jinja templates</text>
+  <rect class="box" x="855" y="220" width="170" height="140" rx="5"/>
+  <text class="m" x="869" y="242">/</text><text class="s" x="1011" y="242" text-anchor="end">home</text>
+  <text class="m" x="869" y="261">/era/{slug}</text><text class="s" x="1011" y="261" text-anchor="end">browse</text>
+  <text class="m" x="869" y="280">/item/{id}</text><text class="s" x="1011" y="280" text-anchor="end">detail</text>
+  <text class="m" x="869" y="299">/search</text><text class="s" x="1011" y="299" text-anchor="end">full text</text>
+  <text class="m" x="869" y="318">/concerts</text><text class="s" x="1011" y="318" text-anchor="end">list</text>
+  <text class="m" x="869" y="337">/imports</text><text class="s" x="1011" y="337" text-anchor="end">history</text>
+  <line class="e" x1="940" y1="204" x2="940" y2="219" marker-end="url(#a)"/>
+  <rect class="box" x="855" y="376" width="170" height="52" rx="5"/>
+  <text class="m" x="869" y="397">images.py</text>
+  <text class="s" x="869" y="415">upload, HEIC→JPEG, thumbs</text>
+
+  <line class="e" x1="840" y1="290" x2="761" y2="290" marker-end="url(#a)"/>
+  <text class="lbl" x="800" y="283" text-anchor="middle">reads</text>
+  <line class="e" x1="840" y1="402" x2="761" y2="402" marker-end="url(#a)"/>
+  <text class="lbl" x="800" y="395" text-anchor="middle">image rows</text>
+
+  <rect class="box" x="840" y="600" width="200" height="60" rx="6"/>
+  <text class="m" x="854" y="625">media/items/&lt;ID&gt;/</text>
+  <text class="s" x="854" y="645">originals + thumbnails</text>
+  <line class="e" x1="940" y1="428" x2="940" y2="599" marker-end="url(#a)"/>
+  <text class="lbl" x="950" y="545">writes files</text>
+
+  <!-- browsers -->
+  <rect class="box" x="1105" y="200" width="185" height="56" rx="6"/>
+  <text class="t" x="1119" y="224">Browser on home wifi</text>
+  <text class="m" x="1119" y="243">&lt;mac&gt;.local:8000</text>
+  <rect class="box" x="1105" y="270" width="185" height="56" rx="6"/>
+  <text class="t" x="1119" y="294">Any Tailscale device</text>
+  <text class="m" x="1119" y="313">metcollection:8000</text>
+  <line class="e" x1="1105" y1="228" x2="1041" y2="228" marker-end="url(#a)"/>
+  <line class="e" x1="1105" y1="298" x2="1041" y2="298" marker-end="url(#a)"/>
+  <text class="lbl" x="1073" y="262" text-anchor="middle">HTTP</text>
+</svg>
