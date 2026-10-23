@@ -46,6 +46,8 @@ eras:
     sort: 19
   - name: "72 Seasons"
     sort: 20
+  - name: "What Happened in Vegas"
+    sort: 21
   - name: "Compilation"
     sort: 90
     special: true
