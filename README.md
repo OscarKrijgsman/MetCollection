@@ -52,7 +52,7 @@ The name was set with:
 
 Open an item (click its ID or title) and use **Upload** at the bottom. Select several files at once; JPEG, PNG, WebP and HEIC (iPhone photos, converted to JPEG) up to 20 MB each. Add a caption, reorder with the arrows, or delete.
 
-Files are stored in `media/items/<ID>/`, with a thumbnail next to each. They are linked to the Excel ID, so editing, moving or sorting rows in Excel never detaches them.
+Files are stored in `media/items/<ID>/`, with a thumbnail next to each. `media` is a symlink to `~/Dropbox/MetCollection`, so the photos are synced by Dropbox; `docker-compose.yml` mounts that folder at the same path so the link also works inside the container. On a new Mac, recreate the link with `ln -s ~/Dropbox/MetCollection media` (after Dropbox has synced the folder). They are linked to the Excel ID, so editing, moving or sorting rows in Excel never detaches them.
 
 After a fresh database (new Mac, Docker reinstalled, volume removed), the photos are still in `media/` but the database doesn't know them. Import the Excel file first, then link them again:
 
@@ -111,7 +111,7 @@ PostgreSQL listens on `localhost:5433` (database, user and password: `metcollect
 docker compose exec -T db pg_dump -U metcollection metcollection > backup-$(date +%F).sql
 ```
 
-Also copy the `media/` folder: the database stores only the paths, the image files live there.
+The photos don't need copying: they live in `~/Dropbox/MetCollection` (linked as `media`). The database stores only their paths.
 
 ## Mac-side Python environment
 

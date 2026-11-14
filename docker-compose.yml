@@ -22,6 +22,8 @@ services:
       TZ: Europe/Amsterdam
     volumes:
       - .:/app
+      # media/ is a symlink to the Dropbox folder; mount that folder at the same path so the link resolves inside the container.
+      - ${HOME}/Dropbox/MetCollection:${HOME}/Dropbox/MetCollection
     ports:
       - "8000:8000"
     depends_on:
