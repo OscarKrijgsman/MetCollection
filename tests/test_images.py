@@ -72,3 +72,42 @@ def test_delete_files(media_root):
     stored = images.save("CD-0001", "x.png", encode("PNG"))
     images.delete_files(stored["file_path"], stored["thumb_path"], None)
     assert not any(media_root.rglob("*.*"))
+
+
+def test_scan_finds_saved_images_oldest_first(media_root):
+    first = images.save("CD-0001", "a.jpg", encode("JPEG"))
+    second = images.save("CD-0001", "b.png", encode("PNG", size=(300, 200)))
+    other = images.save("LP-0002", "c.jpg", encode("JPEG"))
+    import os
+    os.utime(media_root / first["file_path"], (1, 1))
+    os.utime(media_root / second["file_path"], (2, 2))
+
+    found, problems = images.scan()
+    assert problems == []
+    assert found == [{"item_id": "CD-0001", **first}, {"item_id": "CD-0001", **second},
+                     {"item_id": "LP-0002", **other}]
+
+
+def test_scan_regenerates_missing_thumbnail_unless_dry(media_root):
+    stored = images.save("CD-0001", "a.jpg", encode("JPEG"))
+    (media_root / stored["thumb_path"]).unlink()
+
+    images.scan(create_thumbs=False)
+    assert not (media_root / stored["thumb_path"]).exists()
+
+    found, _ = images.scan()
+    assert found[0]["thumb_path"] == stored["thumb_path"]
+    assert Image.open(media_root / stored["thumb_path"]).size == (400, 267)
+
+
+def test_scan_skips_junk_files(media_root):
+    images.save("CD-0001", "a.jpg", encode("JPEG"))
+    folder = media_root / "items" / "CD-0001"
+    (folder / ".DS_Store").write_bytes(b"x")
+    (folder / "notes.txt").write_text("hi")
+    (folder / "broken.jpg").write_bytes(b"not a jpeg")
+
+    found, problems = images.scan()
+    assert len(found) == 1
+    assert sorted(problems) == ["items/CD-0001/broken.jpg: not a readable image, skipped",
+                        "items/CD-0001/notes.txt: not an image file, skipped"]

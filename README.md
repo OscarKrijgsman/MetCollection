@@ -54,6 +54,15 @@ Open an item (click its ID or title) and use **Upload** at the bottom. Select se
 
 Files are stored in `media/items/<ID>/`, with a thumbnail next to each. They are linked to the Excel ID, so editing, moving or sorting rows in Excel never detaches them.
 
+After a fresh database (new Mac, Docker reinstalled, volume removed), the photos are still in `media/` but the database doesn't know them. Import the Excel file first, then link them again:
+
+```bash
+docker compose run --rm app relink-images --dry-run
+docker compose run --rm app relink-images
+```
+
+Photos that are already linked are left alone, so it is safe to run again. Missing thumbnails are recreated. Captions and the custom order are not stored in the files, so they have to be set again; photos come back in the order they were uploaded.
+
 ## Updating the collection
 
 1. Edit `Metallica_disc.xls` in Excel. New rows go in without an ID.

@@ -64,6 +64,43 @@ def run_import(path, dry_run):
     return 0
 
 
+def run_relink(dry_run):
+    """Link photos in media/items/<ID>/ that the database doesn't know about (e.g. after a fresh database)."""
+    from sqlalchemy import text
+
+    from app import images, queries
+    from app.db import engine
+
+    found, problems = images.scan(create_thumbs=not dry_run)
+    migrate()
+    with engine.connect() as conn:
+        with conn.begin() as transaction:
+            known = set(conn.execute(text("SELECT file_path FROM item_image")).scalars())
+            item_ids = set(conn.execute(text("SELECT id FROM item")).scalars())
+            linked, already, unknown = [], 0, {}
+            for photo in found:
+                item_id = photo.pop("item_id")
+                if photo["file_path"] in known:
+                    already += 1
+                elif item_id not in item_ids:
+                    unknown[item_id] = unknown.get(item_id, 0) + 1
+                else:
+                    queries.add_image(conn, item_id, photo)
+                    linked.append(photo["file_path"])
+            if dry_run:
+                transaction.rollback()
+
+    print(f"Photos on disk: {len(found)}. Linked: {len(linked)}, already linked: {already}, "
+          f"unknown item ID: {sum(unknown.values())}")
+    if unknown:
+        show("Folders with no matching item (import the Excel file first?)",
+             [f"{item_id} ({count})" for item_id, count in sorted(unknown.items())])
+    if problems:
+        show("Skipped", problems)
+    print("Dry run, nothing saved." if dry_run else "Saved.")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(prog="metcollection")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -72,8 +109,12 @@ def main():
     imp = sub.add_parser("import", help="import the collection Excel file")
     imp.add_argument("file")
     imp.add_argument("--dry-run", action="store_true", help="show changes without saving")
+    relink = sub.add_parser("relink-images", help="link photos in media/items/ that are not in the database")
+    relink.add_argument("--dry-run", action="store_true", help="show what would be linked without saving")
     args = parser.parse_args()
 
+    if args.cmd == "relink-images":
+        return run_relink(args.dry_run)
     if args.cmd == "migrate":
         migrate()
         print("Database schema is up to date.")
