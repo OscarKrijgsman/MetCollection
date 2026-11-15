@@ -2,7 +2,7 @@
 {% from "_bars.html" import bars %}
 {% block title %}Concerts · MetCollection{% endblock %}
 {% block content %}
-<div class="page-head"><h1>Concerts attended</h1></div>
+<div class="page-head"><h1>Concerts attended</h1><span class="sub">Click a date for the setlist.</span></div>
 <div class="tiles">
   <div class="tile hero"><div class="label">Concerts</div><div class="value">{{ rows | length }}</div></div>
   <div class="tile"><div class="label">With Kees</div><div class="value">{{ with_kees }}</div></div>
@@ -16,7 +16,8 @@
       <tbody>
         {% for c in rows %}
         <tr>
-          <td style="white-space:nowrap">{{ c.date.strftime("%-d %b %Y") }}</td>
+          {% set key = c.date.isoformat() %}
+          <td style="white-space:nowrap">{% if key in setlists %}<a href="/concerts/{{ key }}">{{ c.date.strftime("%-d %b %Y") }}</a>{% else %}{{ c.date.strftime("%-d %b %Y") }}{% endif %}</td>
           <td>{{ c.place or "" }}</td>
           <td>{{ c.venue or "" }}</td>
           <td>{{ c.country or "" }}</td>

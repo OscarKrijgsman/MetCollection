@@ -203,3 +203,7 @@ button:disabled { opacity: 0.4; cursor: default; }
   .filter-row > .field:has(select), .filter-row > .field:has(input.code) { flex-basis: 100%; }
   .field input.year { width: 100%; }
 }
+
+.setlist h2 { margin: 18px 0 6px; font-size: 15px; }
+.setlist h2:first-child { margin-top: 0; }
+.setlist ol { margin: 0; padding-left: 28px; line-height: 1.7; }

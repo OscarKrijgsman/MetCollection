@@ -1,3 +1,4 @@
+import json
 import mimetypes
 import os
 from pathlib import Path
@@ -20,6 +21,12 @@ mimetypes.add_type("image/webp", ".webp")
 images.MEDIA_ROOT.mkdir(exist_ok=True)
 app.mount("/media", StaticFiles(directory=images.MEDIA_ROOT), name="media")
 templates = Jinja2Templates(directory=HERE / "templates")
+SETLISTS_FILE = HERE.parent / "config" / "setlists.json"
+
+
+def load_setlists():
+    """Setlists keyed by the concert date in the Excel sheet, transcribed from setlist.fm."""
+    return json.loads(SETLISTS_FILE.read_text(encoding="utf-8"))
 
 
 def bar_scale(rows):
@@ -193,7 +200,19 @@ def concerts(request: Request):
     with engine.connect() as conn:
         rows, by_country = queries.concerts(conn)
     return templates.TemplateResponse(request, "concerts.html", {
-        "rows": rows, "by_country": by_country, "with_kees": sum(r["with_kees"] for r in rows)})
+        "rows": rows, "by_country": by_country, "with_kees": sum(r["with_kees"] for r in rows),
+        "setlists": load_setlists()})
+
+
+@app.get("/concerts/{date}", response_class=HTMLResponse)
+def setlist(request: Request, date: str):
+    entry = load_setlists().get(date)
+    if entry is None:
+        raise HTTPException(404, f"No setlist for {date}")
+    with engine.connect() as conn:
+        concert = queries.concert_on(conn, date)
+    return templates.TemplateResponse(request, "setlist.html", {
+        "s": entry, "concert": concert})
 
 
 @app.get("/imports", response_class=HTMLResponse)

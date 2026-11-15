@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Setlist {{ s.date }} · MetCollection{% endblock %}
+{% block content %}
+<div class="crumbs"><a href="/concerts">Concerts</a> / {{ s.place }}</div>
+<div class="page-head">
+  <h1>{{ s.venue }}, {{ s.place }}</h1>
+  <span class="sub">{{ s.date }} · {{ s.tour }}</span>
+</div>
+
+{% if s.note %}<div class="banner">{{ s.note }}</div>{% endif %}
+
+<div class="stack">
+  <section class="panel setlist" style="max-width: 640px;">
+    {% set n = namespace(i=0) %}
+    {% for section in s.sections %}
+      {% if section.title %}<h2>{{ section.title }}</h2>{% endif %}
+      <ol start="{{ n.i + 1 }}">
+        {% for song in section.songs %}{% set n.i = n.i + 1 %}
+        <li>{{ song.name }}{% if song.tape %} <span class="muted">(tape)</span>{% endif %}</li>
+        {% endfor %}
+      </ol>
+    {% endfor %}
+  </section>
+
+  <section class="panel" style="max-width: 640px;">
+    <dl class="detail">
+      <dt>Country</dt><dd>{{ s.country }}</dd>
+      {% if concert %}
+      <dt>With Kees</dt><dd>{{ "Yes" if concert.with_kees else "No" }}</dd>
+      {% if concert.with_whom %}<dt>With whom</dt><dd>{{ concert.with_whom }}</dd>{% endif %}
+      {% endif %}
+      <dt>Source</dt><dd><a href="{{ s.url }}" rel="noopener">setlist.fm</a></dd>
+    </dl>
+  </section>
+</div>
+{% endblock %}

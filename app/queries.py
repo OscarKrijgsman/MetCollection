@@ -165,6 +165,11 @@ def concerts(conn):
     return rows, by_country
 
 
+def concert_on(conn, date):
+    return conn.execute(text("SELECT * FROM concert WHERE date = CAST(:date AS date) LIMIT 1"),
+                        {"date": date}).mappings().first()
+
+
 def imports(conn):
     runs = conn.execute(text("SELECT * FROM import_run ORDER BY id DESC")).mappings().all()
     missing = conn.execute(text(f"""
