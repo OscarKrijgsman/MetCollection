@@ -5,3 +5,4 @@ __pycache__/
 .env
 .venv/
 Metallica_disc.xls
+.DS_Store
