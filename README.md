@@ -1,6 +1,6 @@
 # MetCollection
 
-PostgreSQL database of the Metallica collection in `Metallica_disc.xls`. The Excel file is the master; the database is refreshed from it. See `PLAN.md` for the design.
+PostgreSQL database of the Metallica collection in `Metallica_disc.xls`. The Excel file is the master; the database is refreshed from it. The file lives in `~/Dropbox/MetCollection/`; `Metallica_disc.xls` in the repo is a symlink to it, like `media/`. See `PLAN.md` for the design.
 
 Requires Docker Desktop.
 
