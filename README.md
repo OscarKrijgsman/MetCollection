@@ -120,3 +120,11 @@ The photos don't need copying: they live in `~/Dropbox/MetCollection` (linked as
 ```bash
 python3 -m venv .venv && .venv/bin/pip install xlrd==2.0.2
 ```
+
+## Setlists
+
+Each date on the Concerts page links to its setlist. The setlists are transcribed from setlist.fm in `scripts/make_setlists.py`, which writes `config/setlists.json` (read by the app) and one Markdown file per concert in `setlists/`. To add a concert, append it to the list in the script, using the same date as the Concerts tab, and run:
+
+```bash
+.venv/bin/python scripts/make_setlists.py
+```
