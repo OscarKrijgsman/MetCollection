@@ -32,5 +32,11 @@
     <h2>Per country</h2>
     {{ bars(by_country, rows | length) }}
   </section>
+  {% if songs %}
+  <section class="panel" style="max-width: 640px;">
+    <h2>Songs seen live <span class="muted">{{ songs | length }} songs, {{ "{:,}".format(songs | sum(attribute="n")) }} performances over {{ setlists | length }} setlists</span></h2>
+    {{ bars(songs, setlists | length) }}
+  </section>
+  {% endif %}
 </div>
 {% endblock %}

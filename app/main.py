@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse, PlainTextResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app import images, queries
+from app import images, queries, songs
 from app.db import engine
 
 HERE = Path(__file__).resolve().parent
@@ -199,9 +199,10 @@ def search(request: Request, q: str = ""):
 def concerts(request: Request):
     with engine.connect() as conn:
         rows, by_country = queries.concerts(conn)
+    setlists = load_setlists()
     return templates.TemplateResponse(request, "concerts.html", {
         "rows": rows, "by_country": by_country, "with_kees": sum(r["with_kees"] for r in rows),
-        "setlists": load_setlists()})
+        "setlists": setlists, "songs": songs.song_counts(setlists)})
 
 
 @app.get("/concerts/{date}", response_class=HTMLResponse)
