@@ -58,10 +58,10 @@ eras:
     sort: 99
     special: true
 
-# Used for rows with an empty Era cell, and for cassette titles that match no era.
+# Used for rows with an empty Era cell.
 fallback: "Other"
 
-# Sheets without an Era column (Cassettes) get their era from the title.
+# Sheets with era_from_title in sheets.yaml get their era from the title (none do now).
 # Titles listed here win over the alias lookup.
 title_overrides:
   "Nothing else matters": "Metallica"

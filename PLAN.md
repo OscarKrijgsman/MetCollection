@@ -156,7 +156,7 @@ Indexes: GIN on `item.search`, GIN trigram (`pg_trgm`) on `catalog_norm`, `barco
 
 Matching ignores case, surrounding whitespace, and the difference between `…` and `...`. If the importer runs into an era name it doesn't know, it **stops and lists the unknown values**. Nothing gets imported until each value has been added as an alias or as a new era. This keeps typos in Excel from creating ghost eras. An **empty** Era cell is not an error: the item goes to "Other" and the report shows a warning (currently LP-0255, Live at Webster Hall).
 
-Cassettes have no Era column, so their title goes through the same alias lookup (`Load` becomes Load, `…And justice for all` becomes …And Justice for All). Unmatched titles like `MetalliStore` and `No life till leather` go to "Other". `cassette_title_overrides` in the same file can pin a title to an era.
+Cassettes have their own Era column (added 2026-11-21, filled from the CDs sheet). A blank Era cell goes to "Other" with a warning.
 
 Eras currently in the file: Kill 'Em All, Ride the Lightning, Master of Puppets, Garage Days, …And Justice for All, Metallica, Load, Reload, Garage Inc., S&M, St. Anger, Death Magnetic, Lulu, Beyond Magnetic, Through the Never, Hardwired…to Self-Destruct, S&M2, 72 Seasons, Mission Impossible (OST), Liberte, egalite, fraternite, Metallica!, Compilation, Other, plus DVD and Boxsets.
 

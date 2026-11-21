@@ -20,7 +20,7 @@ SHEETS = {
     "Vinyl": ("LP", 2),
     "7Inch": ("7IN", 2),
     " DVD and boxsets": ("DVD", 1),
-    "Cassettes": ("CAS", 1),
+    "Cassettes": ("CAS", 2),
 }
 ID_HEADER = "ID"
 ID_RE = re.compile(r"^([A-Z0-9]+)-(\d{4})$")
